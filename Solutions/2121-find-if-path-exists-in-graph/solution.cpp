@@ -12,10 +12,10 @@ public:
             gr[a].push_back(b);
             gr[b].push_back(a);
         }
-        stack<int> st;
+        queue<int> st;
         st.push(source);
         while(!st.empty()) {
-            int top = st.top(); st.pop();
+            int top = st.front(); st.pop();
             if(!visited[top]) {
                 visited[top] = true;
                 if(top == destination) return true;
