@@ -1,25 +1,27 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-    if(s.length() <= 1) return s.length();
-    int l = 0, r = 1;
-    int mp[1000];
-    for(int i = 0 ; i < 1000 ; i++) mp[i] = -1;
-    mp[s[l]] = 1; int ans = 1;
-    while(r < s.length()) {
-        int rchar = s[r];
-        if(mp[rchar] - 1 >= l) {
-            // char exists before
-            l = mp[rchar];
-            mp[rchar] = r + 1;
-        } else {
-            // char does not exist, safe to add
-            mp[rchar] = r + 1;
-            int cur_ans = r - l + 1;
-            ans = max(ans, cur_ans);
+        if(s == "") return 0;
+        int mp[1000];
+        for(int i = 0 ; i < 1000 ; i++) mp[i] = -1;
+        int l = 0, r = 1;
+        mp[s[0]] = 0;
+        int ans = 1;
+        while(r < s.length()) {
+            // r is the next candidate
+            if(mp[s[r]] >= l) {
+                // can't, sorry, already seen!
+                l = mp[s[r]] + 1;
+                mp[s[r]] = r;
+                ans = max(ans, r-l+1);
+            } else {
+                // add ittttttttttt
+                mp[s[r]] = r;
+                ans = max(ans, r-l+1);
+            }
+            r++;
         }
-        r++;
+        
+        return ans;
     }
-    return ans;
-}
 };
