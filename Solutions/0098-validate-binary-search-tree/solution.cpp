@@ -9,22 +9,39 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+class BSTIterator {
+public:
+    stack<TreeNode*> vv;
+    BSTIterator(TreeNode* root) {
+        push(root);
+    }
+    
+    int next() {
+        TreeNode* el = vv.top(); vv.pop();
+        push(el->right);
+        return el->val;
+    }
+
+    void push(TreeNode* el) {
+        if(el == nullptr) return;
+        vv.push(el);
+        push(el->left);
+    }
+    
+    bool hasNext() {
+        return vv.empty() == false;
+    }
+};
 class Solution {
 public:
-    vector<int> arr;
-
-void push(TreeNode* node) {
-  if(node == nullptr) return;
-  push(node->left);
-  arr.push_back(node->val);
-  push(node->right);
-}
-
-bool isValidBST(TreeNode* root) {
-  push(root);
-  for(int i = 1 ; i < arr.size() ; i++) {
-    if(arr[i-1] >= arr[i]) return false;
-  }
-  return true;
-}
+    bool isValidBST(TreeNode* root) {
+        BSTIterator iter(root);
+        int val = iter.next();
+        while(iter.hasNext()) {
+            int val2 = iter.next();
+            if(val >= val2) return false;
+            val = val2;
+        }
+        return true;
+    }
 };
