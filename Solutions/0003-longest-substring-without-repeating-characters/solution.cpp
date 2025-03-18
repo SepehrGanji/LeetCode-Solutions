@@ -12,13 +12,9 @@ public:
             if(mp[s[r]] >= l) {
                 // can't, sorry, already seen!
                 l = mp[s[r]] + 1;
-                mp[s[r]] = r;
-                ans = max(ans, r-l+1);
-            } else {
-                // add ittttttttttt
-                mp[s[r]] = r;
-                ans = max(ans, r-l+1);
             }
+            mp[s[r]] = r;
+                ans = max(ans, r-l+1);
             r++;
         }
         
