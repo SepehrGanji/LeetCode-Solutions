@@ -2,28 +2,33 @@ class Solution {
 public:
     typedef pair<int, int> pii;
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        vector<bool> visited(n, false);
-        vector<vector<pii>> gr(n);
-        for(auto ed: times) {
-            int u = ed[0], v = ed[1], w = ed[2];
-            gr[u-1].push_back(pii(v-1, w));
+        vector<vector<pii>> gr(n+1);
+        for(auto el: times) {
+            int u = el[0], v = el[1], w = el[2];
+            gr[u].push_back(pii(v, w));
         }
-        int maxTime = 0;
-        priority_queue<pii, vector<pii>, greater<>> pq;
-        pq.push(pii(0, k-1));
-        while(!pq.empty()) {
-            auto el = pq.top(); pq.pop();
-            int t = el.first, node = el.second;
-            if(visited[node]) continue;
-            visited[node] = true;
-            maxTime = max(maxTime, t);
-            for(auto ed: gr[node]) {
-                if(!visited[ed.first]) {
-                    pq.push(pii(t + ed.second, ed.first));
+        vector<bool> visited(n+1, false);
+        set<pii> st;
+        int ans = 0;
+        st.insert(pii(0, k));
+        // visited[k] = true;
+        while(!st.empty()) {
+            pii el = *st.begin();
+            int time = el.first;
+            int node = el.second;
+            st.erase(st.begin());
+            if(!visited[node]) {
+                ans = max(ans, time);
+                visited[node] = true;
+                for(auto nei: gr[node]) {
+                    if(!visited[nei.first]) st.insert(pii(time+nei.second, nei.first));
                 }
             }
         }
-        for(int i = 0 ; i < n ; i++) if(visited[i] == false) return -1;
-        return maxTime;
+        // for(int i = 1 ; i <= n ; i++)  {
+        //     cout << "i: " << i << " && visited: " << visited[i] << endl;
+        // }
+        for(int i = 1 ; i <= n ; i++) if(!visited[i]) return -1;
+        return ans;
     }
 };
