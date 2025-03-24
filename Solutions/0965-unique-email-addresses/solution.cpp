@@ -1,32 +1,25 @@
 class Solution {
 public:
-    string separate_email(string email) {
-        string local_name = "", domain_name = "";
-        int ptr = 0, n = email.length();
-        bool ignore = false;
-        while(email[ptr] != '@') {
-            if(!ignore) {
-                int ch = email[ptr];
-                if(ch == '+') ignore = true;
-                else if(ch != '.') local_name += ch;
+    string filter(string s) {
+        string ans = "";
+        int i = 0;
+        bool bad = false;
+        for( ; s[i] != '@' ; i++){
+            if(bad) continue;
+            else {
+                if(s[i] == '+') bad = true;
+                else {
+                    if(s[i] != '.') ans += s[i];
+                }
             }
-            ptr++;
         }
-        ptr++;
-        while(ptr < n) {
-            domain_name += email[ptr];
-            ptr++;
-        }
-        
-        return local_name + "@" + domain_name;
+        while(i < s.length()) ans += s[i++];
+        return ans;
     }
     
     int numUniqueEmails(vector<string>& emails) {
         set<string> st;
-        for(auto email: emails) {
-            string ans = separate_email(email);
-            st.insert(ans);
-        }
+        for(auto em: emails) st.insert(filter(em));    
         return st.size();
     }
 };
