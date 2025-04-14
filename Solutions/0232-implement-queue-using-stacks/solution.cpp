@@ -1,33 +1,34 @@
 class MyQueue {
 public:
     stack<int> st1, st2;
-    MyQueue() {}
+    MyQueue() {
+        
+    }
     
     void push(int x) {
-        this->st1.push(x);
-    }
-
-    void copy() {
-      while(!this->st1.empty()) {
-        this->st2.push(this->st1.top());
-        this->st1.pop();
-      }
+        st1.push(x);
     }
     
     int pop() {
-        if(this->st2.empty()) copy();
-        int tmp = this->st2.top();
-        this->st2.pop();
-        return tmp;
+        int el = peek();
+        st2.pop();
+        return el;
     }
     
     int peek() {
-        if(this->st2.empty()) copy();
-        return this->st2.top();
+        if(st2.empty()) norm();
+        return st2.top();
     }
     
     bool empty() {
-        return this->st1.empty() && this->st2.empty();
+        return st1.empty() && st2.empty();
+    }
+    
+    void norm() {
+        while(!st1.empty()) {
+            int el = st1.top(); st1.pop();
+            st2.push(el);
+        }
     }
 };
 
