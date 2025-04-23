@@ -11,15 +11,6 @@ public:
                     if(j == 0) col = true;
                 }
             }
-                
-        
-        for(int i = 0 ; i < n ; i++) {
-            for(int j = 0 ; j < m ; j++) {
-                cout << matrix[i][j] << ' ';
-            }
-            cout << endl;
-        }
-        cout << "Col, Row" << col << ',' << row << endl;
 
         // first row
         for(int j = 1 ; j < m ; j++) {
