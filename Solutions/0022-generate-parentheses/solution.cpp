@@ -1,22 +1,20 @@
 class Solution {
 public:
     vector<string> ans;
-
-    void solve(int op, int cl, string s, int n) {
-        if(op == cl && op + cl == n * 2) {
-            ans.push_back(s);
+    
+    void iter(int n, string so_far, int open, int close) {
+        if(so_far.length() == 2*n) {
+            ans.push_back(so_far);
             return;
         }
-        if(op < n) {
-            solve(op+1, cl, s + "(", n);
-        }
-        if(cl < op) {
-            solve(op, cl+1, s + ")", n);
-        }
+        // can we open
+        if(open < n) iter(n, so_far+"(", open+1, close);
+        // can we close
+        if(close < open) iter(n, so_far+")", open, close+1);
     }
     
     vector<string> generateParenthesis(int n) {
-        solve(0, 0, "", n);
-        return ans;    
+        iter(n, "", 0, 0);
+        return ans;
     }
 };
