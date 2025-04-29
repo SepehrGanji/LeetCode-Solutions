@@ -11,12 +11,17 @@
  */
 class Solution {
 public:
-    int traverse(TreeNode* mmd, int depth = 0) {
-  if(mmd == nullptr) return depth;
-  return max(traverse(mmd->left, depth + 1), traverse(mmd->right, depth + 1));
-} 
-
-int maxDepth(TreeNode* root) {
-  return traverse(root);
-}
+    int ans = 0;
+    
+    void trav(TreeNode* root, int level) {
+        if(root == nullptr) return;
+        ans = max(ans, level);
+        trav(root->left, level+1);
+        trav(root->right, level+1);
+    }
+    
+    int maxDepth(TreeNode* root) {
+        trav(root, 1);
+        return ans;
+    }
 };
