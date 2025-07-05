@@ -1,34 +1,26 @@
 class Solution {
 public:
-    bool isValid(int A, int B, int C, int D) {
-        if(A * 10 + B >= 24) return false;
-        if(C * 10 + D >= 60) return false;
-        
-        return true;
-    }
-    
-    string mini(string A, string B) {
-        if(A == "") return B;
-        if(B == "") return A;
-        if(A > B) return A;
-        return B;
+    bool isValid(vector<int>& arr) {
+        int h = (arr[0]*10) + arr[1];
+        int m = (arr[2]*10) + arr[3];
+        return h < 24 && m < 59;
     }
     
     string largestTimeFromDigits(vector<int>& arr) {
-        sort(arr.begin(), arr.end());
         string ans = "";
+        sort(arr.begin(), arr.end());
         do {
-            if(isValid(arr[0], arr[1], arr[2], arr[3])) {
-                string B = "";
-                B += char('0' + arr[0]);
-                B += char('0' + arr[1]);
-                B += ':';
-                B += char('0' + arr[2]);
-                B += char('0' + arr[3]);
-                ans = mini(ans, B);
+            if(isValid(arr)) {
+                string ten = "";
+                ten += ('0' + arr[0]);
+                ten += ('0' + arr[1]);
+                ten += ':';
+                ten += ('0' + arr[2]);
+                ten += ('0' + arr[3]);
+                if(ans == "") ans = ten;
+                else ans = max(ans, ten);
             }
-        } while(next_permutation(arr.begin(), arr.end()));
-        
+        } while (next_permutation(arr.begin(), arr.end()));
         return ans;
     }
 };
