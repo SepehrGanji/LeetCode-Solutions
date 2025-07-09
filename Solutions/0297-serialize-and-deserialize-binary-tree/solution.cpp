@@ -4,6 +4,7 @@ public:
     string serialize(TreeNode* root) {
         ostringstream out;
         serialize(root, out);
+        cout << out.str() << endl;
         return out.str();
     }
 
