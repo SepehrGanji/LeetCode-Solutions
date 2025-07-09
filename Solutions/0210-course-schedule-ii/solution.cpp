@@ -1,31 +1,70 @@
 class Solution {
 public:
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        int n = numCourses;
-        vector<vector<int>> g;
-        vector<int> ans;
-        vector<int> degree(n, 0);
-        stack<int> st;
-        for(int i = 0 ; i < n ; i++) g.push_back({});
-        for(auto record: prerequisites) {
-            // a -> b
-            int b = record.at(0);
-            int a = record.at(1);
-            g[a].push_back(b);
-            degree[b]++;
+    vector<int> visited;
+    int label;
+    vector<int> order;
+    
+    void DFS(vector<vector<int>> &g, int s) {
+        visited[s] = true;
+        for(auto nei: g[s]) {
+            if(!visited[nei]) DFS(g, nei);
         }
-        for(int i = 0 ; i < n ; i++) if(degree[i] == 0) st.push(i);
-        int cnt = 0;
-        while(!st.empty()) {
-            cnt++;
-            int curr = st.top(); st.pop();
-            ans.push_back(curr);
-            for(auto el: g[curr]) {
-                if(--degree[el] == 0) st.push(el);
+        order[s] = label--;
+    }
+    
+    bool cycle(vector<vector<int>>& g, int n) {
+        vector<int> color(n, 0);
+
+        for (int start = 0; start < n; start++) {
+            if (color[start] != 0) continue;
+
+            stack<int> st;
+            st.push(start);
+
+            while (!st.empty()) {
+                int node = st.top();
+
+                if (color[node] == 0) {
+                    color[node] = 1; 
+                    for (int neighbor : g[node]) {
+                        if (color[neighbor] == 1) {
+                            return true;
+                        }
+                        if (color[neighbor] == 0) {
+                            st.push(neighbor);
+                        }
+                    }
+                } else {
+                    color[node] = 2;
+                    st.pop();
+                }
             }
         }
 
-        if(cnt < n) ans.clear();
+        return false;
+    }
+    
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        int n = numCourses;
+        vector<vector<int>> g(n);
+        for(auto pa: prerequisites) {
+            g[pa[1]].push_back(pa[0]);
+        }
+        // global vars
+        for(int i = 0 ; i < n ; i++) {
+            visited.push_back(false);
+            order.push_back(-1);
+        }
+        label = n-1;
+        // start
+        for(int i = 0 ; i < n ; i++) {
+            if(!visited[i]) DFS(g, i);
+        }
+        // compute ans
+        vector<int> ans; 
+        if(cycle(g, n)) return ans;
+        for(int i = 0 ; i < n ; i++) ans.push_back(-1);
+        for(int i = 0 ; i < n ; i++) ans[order[i]] = i;
         return ans;
     }
 };
