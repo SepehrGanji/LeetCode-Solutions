@@ -1,25 +1,33 @@
 class Solution {
 public:
     int maxDistToClosest(vector<int>& seats) {
+        int a1 = 0, a2 = 0, a3 = 0;
         int n = seats.size();
-        vector<int> pfx(n, 30000);
-        vector<int> sfx(n, 30000);
-        
-        if(seats[0] == 1) pfx[0] = 0;
-        for(int i = 1 ; i < n ; i++) {
-            if(seats[i] == 1) pfx[i] = 0;
-            else pfx[i] = pfx[i-1] + 1;
+        int s = -1, e = -1;
+        for(int i = 0 ; i < n ; i++) {
+            if(seats[i] == 0) a1++;
+            else {
+                s = i;
+                break;
+            }
         }
-        
-        if(seats[n-1] == 1) sfx[n-1] = 0;
-        
-        for(int i = n-2 ; i >= 0 ; i--) {
-            if(seats[i] == 1) sfx[i] = 0;
-            else sfx[i] = sfx[i+1] + 1;
+        for(int i = n-1 ; i>= 0 ; i--) {
+            if(seats[i] == 0) a3++;
+            else {
+                e = i;
+                break;
+            }
         }
-        
-        int ans = 0;
-        for(int i = 0 ; i < n ; i++) ans = max(ans, min(pfx[i], sfx[i]));
-        return ans;
+        int len = 0;
+        int max_len = 0;
+        for(int i = s ; i <= e ; i++) {
+            if(seats[i] == 0) len++;
+            else {
+                max_len = max(max_len, len);
+                len = 0;
+            }
+        }
+        a2 = ceil(max_len / 2.0);
+        return max(a1, max(a2, a3));
     }
 };
