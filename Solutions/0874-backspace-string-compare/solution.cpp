@@ -1,30 +1,46 @@
 class Solution {
 public:
     bool backspaceCompare(string s, string t) {
-  int p1, p2;
-  p1 = s.length() - 1;
-  p2 = t.length() - 1;
-  int ts1 = 0, ts2 = 0;
-  while(p1 >= 0 || p2 >= 0) {
-    char e1 = p1 >= 0 ? s[p1] : '.';
-    char e2 = p2 >= 0 ?  t[p2] : '.';
-    if(e1 == '#') {
-      ts1++;
-      p1--;
-    } else if (e2 == '#') {
-      ts2++;
-      p2--;
-    } else if(ts1 > 0) {
-      ts1--; p1--;
-    } else if(ts2 > 0) {
-      ts2--; p2--;
-    } else {
-      //cout << "e1e2" << e1 << e2 << endl;
-      if(e1 != e2) return false;
-      p1--;p2--;
+        while(s.length() < t.length()) s = '#' + s;
+        while(t.length() < s.length()) t = '#' + t;
+        int ska = 0, skb = 0;
+        int ptra = s.length() - 1, ptrb = t.length() - 1;
+        char tma = ' ';
+        char tmb = ' ';
+        while(ptra >= 0 && ptrb >= 0) {
+            if(tma == ' ' && ptra >= 0) {
+                // we still have something in a
+                if(s[ptra] == '#') ska++, ptra--;
+                else if(ska > 0) ska--, ptra--;
+                else tma = s[ptra];
+            }
+            if(tmb == ' ' && ptrb >= 0) {
+                // we still have something in b
+                if(t[ptrb] == '#') skb++, ptrb--;
+                else if(skb > 0) skb--, ptrb--;
+                else tmb = t[ptrb];
+            }
+            if(tma != ' ' && tmb != ' ') {
+                if(tma != tmb) return false;
+                tma = ' ';
+                tmb = ' ';
+                ptra--;
+                ptrb--;
+            }
+        }
+        if(tma != ' ' || tmb != ' ') return false;
+        while(ptra >= 0) {
+            if(tma != ' ') return false;
+            if(s[ptra] == '#') ska++, ptra--;
+            else if(ska > 0) ska--, ptra--;
+            else tma = s[ptra];
+        }
+        while(ptrb >= 0) {
+            if(tmb != ' ') return false;
+            if(t[ptrb] == '#') skb++, ptrb--;
+            else if(skb > 0) skb--, ptrb--;
+            else tmb = t[ptrb];
+        }
+        return true;
     }
-  }
-  //cout << "p1: " << p1 << " & p2: " << p2 << endl;
-  return p1 < 0 && p2 < 0;
-}
 };
