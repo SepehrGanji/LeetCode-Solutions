@@ -11,6 +11,7 @@ public:
             mp[price] = max(beauty, mp[price]);
             st.insert(price);
         }
+        // A prefix "max"
         int prev_val = -1;
         for(auto it = mp.begin() ; it != mp.end(); it++) {
             int key = it->first, value = it->second;
