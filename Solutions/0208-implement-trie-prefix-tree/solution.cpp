@@ -1,75 +1,72 @@
-class Trie {
+class TrieNode {
+private:
+    TrieNode* links[26];
+    bool isEnd;
 public:
-    struct Node {
-      char nc;
-      bool end;
-      vector<Node*> list;
-      Node(char c) {
-        nc = c;
-        end = false;
-      }
-    };
+    TrieNode() {
+        for(int i = 0 ; i < 26 ; i++) links[i] = nullptr;
+        isEnd = false;
+    }
 
-    Node *root;
+    bool contains(char ch) {
+        return links[ch-'a'] != nullptr;
+    }
 
+    TrieNode* get(char ch) {
+        return links[ch-'a'];
+    }
+
+    void put(char ch, TrieNode* node) {
+        links[ch-'a'] = node;
+    }
+
+    void setEnd(bool e=true) {
+        isEnd = e;
+    }
+
+    bool isEndOfWord() {
+        return isEnd;
+    }
+    
+};
+
+class Trie {
+private:
+    TrieNode* root;
+    TrieNode* searchPfx(string pfx) {
+        TrieNode* node = root;
+        for(auto ch: pfx) {
+            if(!node->contains(ch)) {
+                return nullptr;
+            }
+            node = node->get(ch);
+        }
+        return node;
+    }
+public:
     Trie() {
-      root = new Node('.');
+        root = new TrieNode();
     }
     
     void insert(string word) {
-      Node* current = root;
-      for(int i = 0 ; i < word.size() ; i++) {
-        char current_c = word[i];
-        Node* found_node = nullptr;
-        for(auto el: current->list) {
-          if(el->nc == current_c) {
-            found_node = el;
-            break;
-          }
+        TrieNode* node = root;
+        for(auto ch: word) {
+            if(!node->contains(ch)) {
+                node->put(ch, new TrieNode());
+            }
+            node = node->get(ch);
         }
-        if(found_node != nullptr) {
-          current = found_node;
-        } else {
-          Node* newNode = new Node(current_c);
-          current->list.push_back(newNode);
-          current = newNode;
-        }
-      }
-      current->end = true;
+        node->setEnd();
     }
     
     bool search(string word) {
-        Node* current = root;
-        for(int i = 0 ; i < word.size() ; i++) {
-          char current_c = word[i];
-          Node* found_node = nullptr;
-          for(auto el: current->list) {
-            if(el->nc == current_c) {
-              found_node = el;
-              break;
-            }
-          }
-          if(found_node == nullptr) return false;
-          else current = found_node;
-        }
-        return current->end;
+        TrieNode* node = searchPfx(word);
+        return node != nullptr && node->isEndOfWord();
     }
     
     bool startsWith(string prefix) {
-        Node* current = root;
-        for(int i = 0 ; i < prefix.size() ; i++) {
-          char current_c = prefix[i];
-          Node* found_node = nullptr;
-          for(auto el: current->list) {
-            if(el->nc == current_c) {
-              found_node = el;
-              break;
-            }
-          }
-          if(found_node == nullptr) return false;
-          else current = found_node;
-        }
-        return true;
+        TrieNode* node = searchPfx(prefix);
+        return node != nullptr;
     }
 };
 
