@@ -3,22 +3,20 @@
 
 class Solution {
 public:
-    int findCelebrity(int n) {
-        int cand = 0;
+    bool isCel(int a, int n) {
         for(int i = 0 ; i < n ; i++) {
-            if(knows(cand, i)) {
-                cand = i;
-            }
-        }
-        if(isCel(cand, n)) return cand;
-        return -1;
-    }
-
-    bool isCel(int i, int n) {
-        for(int j = 0 ; j < n ; j++) {
-            if(i == j) continue;
-            if(knows(i, j) || !knows(j, i)) return false;
+            if(i == a) continue;
+            if(knows(i, a) == false) return false;
+            if(knows(a, i) == true) return false;
         }
         return true;
     }
+
+    int findCelebrity(int n) {
+        for(int i = 0 ; i < n ; i++) {
+            if(isCel(i, n)) return i;
+        }
+        return -1;
+    }
 };
+
