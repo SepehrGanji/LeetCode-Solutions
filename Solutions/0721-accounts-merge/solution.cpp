@@ -8,13 +8,8 @@ public:
         int pu = find(u, par);
         int pv = find(v, par);
         if(pu==pv) return false;
-        if(sz[pu]<sz[pv]){
-            par[pu]=pv;
-            sz[pv]+=sz[pu];
-        }else{
-            par[pv]=pu;
-            sz[pu]+=sz[pv];
-        }
+        par[pu]=pv;
+        sz[pv]+=sz[pu];
         return true;
     }
     vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
