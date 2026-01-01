@@ -1,17 +1,21 @@
 class Solution {
 public:
     bool canFormArray(vector<int>& arr, vector<vector<int>>& pieces) {
-        for(int i = 0 ; i < arr.size() ;) {
+        int n = arr.size();
+        int m = pieces.size();
+        int i = 0;
+        while(i < n) {
             bool found = false;
-            int el = arr[i];
-            for(int j = 0 ; j < pieces.size() ; j++) {
-                if(el == pieces[j][0]) {
+            for(int j = 0 ; j < m ; j++) {
+                if(arr[i] == pieces[j][0]) {
                     found = true;
-                    for(int k = 0 ; k < pieces[j].size() ; k++) {
-                        if(arr[i] != pieces[j][k]) return false;
+                    int k = pieces[j].size();
+                    for(int kk = 0 ; kk < k ; kk++) {
+                        if(arr[i] != pieces[j][kk]) return false;
                         i++;
                     }
                 }
+                if(i >= n) break;
             }
             if(!found) return false;
         }
