@@ -9,27 +9,25 @@
  */
 class Solution {
 public:
-    bool find(TreeNode* root, int val) {
+    bool findme(TreeNode* root, int el) {
         if(root == nullptr) return false;
-        if(root->val == val) return true;
-        return find(root->left, val) || find(root->right, val);
+        if(root->val == el) return true;
+        return findme(root->left, el) || findme(root->right, el);
     }
+
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         TreeNode* curr = root;
-        int qv = q->val;
-        int pv = p->val;
+        int pval = p->val, qval = q->val;
         while(1) {
-            if(curr->val == qv || curr->val == pv) return curr;
-            bool qvleft = find(curr->left, qv);
-            bool qvright = find(curr->right, qv);
-            bool pvleft = find(curr->left, pv);
-            bool pvright = find(curr->right, pv);
-            if(qvleft && pvleft) {
+            if(curr->val == qval || curr->val == pval) return curr;
+            bool pleft = findme(curr->left, pval);
+            bool qleft = findme(curr->left, qval);
+            if(pleft && qleft) {
                 curr = curr->left;
-            } else if(qvright && pvright) {
-                curr = curr->right;
-            } else {
+            } else if(pleft || qleft) {
                 return curr;
+            } else {
+                curr = curr->right;
             }
         }
     }
